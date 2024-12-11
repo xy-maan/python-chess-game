@@ -7,23 +7,39 @@ including grpahics and sounds
 
 import pygame
 from const import *
+from board import Board
 
 class Game:
-	def __init__(self):
-		pass
+    def __init__(self):
+        self.board = Board()
 
-	# show methods
+    # show methods
 
-	def show_background(self, surface):
+    def show_background(self, surface):
 
-		# draw the board
-		for row in range(ROWS):
-			for col in range(COLS):
-				if (row + col) % 2 == 0:
-					color = (234, 235, 200) # light green
-				else:
-					color = (119, 154, 88) # dark green
+        # draw the board
+        for row in range(ROWS):
+            for col in range(COLS):
+                if (row + col) % 2 == 0:
+                    color = (199, 194, 172)  # light green
+                else:
+                    color = (91, 87, 83)  # dark green
 
-				rect = (col * SQUARE_SIZE, row * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE) # (x, y, width, height)
+                rect = (col * SQUARE_SIZE, row * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE) # (x, y, width, height)
 
-				pygame.draw.rect(surface, color, rect)
+                pygame.draw.rect(surface, color, rect)
+
+    def show_pieces(self, surface):
+        for row in range(ROWS):
+            for col in range(COLS):
+                if self.board.squares[row][col].has_piece():
+                    piece = self.board.squares[row][col].piece
+
+                    img = pygame.image.load(piece.img_path)
+                    center_coordinates = (col * SQUARE_SIZE) + (SQUARE_SIZE // 2), row * SQUARE_SIZE + (SQUARE_SIZE // 2)
+
+                    # align the piece to the center of the square
+                    piece.pos = img.get_rect(center=center_coordinates)
+
+                    # show the piece.
+                    surface.blit(img, piece.pos)
