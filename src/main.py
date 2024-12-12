@@ -55,7 +55,7 @@ class Main:
                         # game.show_background(screen)
                         # game.show_pieces(screen)
 
-                        dragger.update_blit(screen)
+                        dragger.drag(screen)
 
                 # release event
                 elif event.type == pygame.MOUSEBUTTONUP:
