@@ -3,6 +3,7 @@ from const import *
 from piece import *
 from move import Move
 
+
 class Board:
 
     def __init__(self):
@@ -43,35 +44,8 @@ class Board:
         # King
         self.squares[row_other][4] = Square(row_other, 4, King(color))
 
-    def knight_moves(self, row, col, piece):
+    def calc_moves(self, row, col, piece):
 
-        # all the moves a knight can make being on any square.
-        moves = [
-            (row + 1, col + 2),
-            (row + 1, col - 2,),
-            (row - 1, col + 2),
-            (row - 1, col - 2),
-            (row + 2, col + 1),
-            (row + 2, col - 1),
-            (row - 2, col + 1),
-            (row - 2, col - 1)
-        ]
-
-        for move in moves:
-            new_row, new_col = move
-
-            if Square.inside_board(new_row, new_col):
-                if self.squares[new_row][new_col].empty_or_rival(piece.color):
-                    initial = Square(row, col)
-                    final = Square(new_row, new_col)
-
-                    move = Move(initial, final)
-
-                    piece.add_move(move)
-
-
-    def calc_moves(self, piece, row, col):
-        
         if isinstance(piece, Pawn):
             pass
         elif isinstance(piece, Bishop):
@@ -84,3 +58,30 @@ class Board:
             pass
         elif isinstance(piece, King):
             pass
+
+    def knight_moves(self, row, col, piece):
+
+        # all the moves a knight can make being on any square.
+        moves = [
+            (row + 1, col + 2),
+            (row + 1, col - 2),
+            (row - 1, col + 2),
+            (row - 1, col - 2),
+            (row + 2, col + 1),
+            (row + 2, col - 1),
+            (row - 2, col + 1),
+            (row - 2, col - 1),
+        ]
+
+        for move in moves:
+            new_row, new_col = move
+
+            if Square.inside_board(new_row, new_col):
+                if self.squares[new_row][new_col].empty_or_rival(piece.color):
+
+                    initial = Square(row, col)
+                    final = Square(new_row, new_col)
+
+                    move = Move(initial, final)
+
+                    piece.add_move(move)
