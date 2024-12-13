@@ -49,3 +49,15 @@ class Game:
 
                         # show the piece.
                         surface.blit(img, piece.pos)
+
+    def show_moves(self, surface):
+        if self.dragger.dragging:
+            piece = self.dragger.piece
+
+            # loop on all valid moves that were added to the moves array.
+            for move in piece.moves:
+                color = "#C86464" if (move.final.row + move.final.col) % 2 == 0 else "#C84646"
+
+                rect = (move.final.col * SQUARE_SIZE, move.final.row * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE)
+
+                pygame.draw.rect(surface, color, rect)

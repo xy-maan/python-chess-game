@@ -41,10 +41,14 @@ class Main:
                     clicked_row = dragger.mouseY // SQUARE_SIZE
                     clicked_col = dragger.mouseX // SQUARE_SIZE
 
+
                     if board.squares[clicked_row][clicked_col].has_piece():
                         piece = board.squares[clicked_row][clicked_col].piece
+                        board.calc_moves(piece, clicked_row, clicked_col)
                         dragger.save_init_pos(event.pos)
                         dragger.drag_on(piece)
+
+                        game.show_moves(screen)
 
                 # mouse motion event
                 elif event.type == pygame.MOUSEMOTION:
@@ -54,6 +58,8 @@ class Main:
                         # to avoid the illusion of having another piece behind the piece that is being dragged.
                         # game.show_background(screen)
                         # game.show_pieces(screen)
+
+                        game.show_moves(screen)
 
                         dragger.drag(screen)
 
