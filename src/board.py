@@ -47,7 +47,7 @@ class Board:
     def calc_moves(self, row, col, piece):
 
         if isinstance(piece, Pawn):
-            pass
+            self.pawn_moves(row, col, piece)
         elif isinstance(piece, Bishop):
             pass
         elif isinstance(piece, Knight):
@@ -85,3 +85,29 @@ class Board:
                     move = Move(initial, final)
 
                     piece.add_move(move)
+
+    def pawn_moves(self, row, col, piece):
+        
+        # a pawn can move 2 squares on the first move, otherwise, it moves 1 square.
+        steps = 1 if piece.moved == True else 2
+
+        # vertical moves
+        start = row + piece.dir # start from the first valid square
+        end = row + (piece.dir * (steps + 1)) # end at the last valid square + 1 (for looping)
+
+        # here move hold a row index, pawns move through rows.
+        for move in range(start, end, piece.dir):
+
+            # squares are out of board, or pawn is blocked by a piece.
+            if not Square.inside_board(move) or not self.squares[move][col].is_empty():
+                break
+            
+            # create initial and final sqaures.
+            initial = Square(row, col)
+            final = Square(move, col)
+
+            move = Move(initial, final)
+
+            piece.add_move(move)
+
+        # diagonal moves
