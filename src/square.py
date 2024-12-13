@@ -25,6 +25,9 @@ class Square:
     # we must check that the square has a piece before checking the piece color, pawn diagonal test problem.
     def has_enemy_piece(self, color):
         return self.has_piece() and self.piece.color != color
+    
+    def has_team_piece(self, color):
+        return self.has_piece() and self.piece.color == color
 
     def empty_or_enemy(self, color):
         return self.is_empty() or self.has_enemy_piece(color)
