@@ -51,7 +51,7 @@ class Main:
                     if dragger.dragging:
                         dragger.update_mouse(event.pos)
 
-                        # to void the illusion of having another piece behind the piece that is being dragged.
+                        # to avoid the illusion of having another piece behind the piece that is being dragged.
                         # game.show_background(screen)
                         # game.show_pieces(screen)
 

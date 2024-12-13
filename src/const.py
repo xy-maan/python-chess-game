@@ -3,8 +3,8 @@ This file will contain all project constants (window dimensions, rows, cols, ...
 """
 
 # Game Window Dimensions
-WIDTH = 700
-HEIGHT = 700
+WIDTH = 720
+HEIGHT = 720
 
 # Board Dimensions
 ROWS = 8
