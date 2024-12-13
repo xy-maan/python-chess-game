@@ -50,35 +50,61 @@ class Board:
         if isinstance(piece, Pawn):
             self.pawn_moves(row, col, piece)
         elif isinstance(piece, Bishop):
-            self.straightline_moves(row, col, piece, [
-                (-1, 1),   # up-right
-                (-1, -1),  # up-left
-                (1, 1),    # down-right
-                (1, -1)    # down-left
-            ])
+            self.straightline_moves(row, col, piece, [(-1, 1), (-1, -1), (1, 1), (1, -1)])  # up-right  # up-left  # down-right  # down-left
         elif isinstance(piece, Knight):
             self.knight_moves(row, col, piece)
         elif isinstance(piece, Rook):
-            self.straightline_moves(row, col, piece, [
-                (-1, 0),    # up
-                (0, 1),     # right
-                (1, 0),     # down
-                (0, -1)     # left
-            ])
+            self.straightline_moves(row, col, piece, [(-1, 0), (0, 1), (1, 0), (0, -1)])  # up  # right  # down  # left
         elif isinstance(piece, Queen):
-            self.straightline_moves(row, col, piece, [
-                (-1, 0),    # up
-                (0, 1),     # right
-                (1, 0),     # down
-                (0, -1),    # left
-                (-1, 1),    # up-right
-                (-1, -1),   # up-left
-                (1, 1),     # down-right
-                (1, -1)     # down-left
-            ])
+            self.straightline_moves(
+                row,
+                col,
+                piece,
+                [
+                    (-1, 0),  # up
+                    (0, 1),  # right
+                    (1, 0),  # down
+                    (0, -1),  # left
+                    (-1, 1),  # up-right
+                    (-1, -1),  # up-left
+                    (1, 1),  # down-right
+                    (1, -1),  # down-left
+                ],
+            )
         elif isinstance(piece, King):
-            pass
-    
+            self.king_moves(row, col, piece)
+
+    # calculate king moves
+    def king_moves(self, row, col, piece):
+        adjs = [
+            (row - 1, col),  # up
+            (row - 1, col + 1),  # up-right
+            (row, col + 1),  # right
+            (row + 1, col + 1),  # down-right
+            (row + 1, col),  # down
+            (row + 1, col - 1),  # down-left
+            (row, col - 1),  # left
+            (row - 1, col - 1),  # up-left
+        ]
+
+        # normal king moves
+        for adj in adjs:
+
+            new_row, new_col = adj
+
+            if Square.inside_board(new_row, new_col):
+                if self.squares[new_row][new_col].empty_or_enemy(piece.color):
+                    initial = Square(row, col)
+                    final = Square(new_row, new_col)
+
+                    move = Move(initial, final)
+
+                    piece.add_move(move)
+
+        # queen-side castling
+
+        # king-side castling
+
     # calculate knight valid moves
     def knight_moves(self, row, col, piece):
 
@@ -160,7 +186,7 @@ class Board:
 
             while True:
                 if Square.inside_board(new_row, new_col):
-                    
+
                     initial = Square(row, col)
                     final = Square(new_row, new_col)
 
@@ -176,7 +202,7 @@ class Board:
 
                         # we break since it's the last point we can reach
                         break
-                    
+
                     # the square has a team piece, here we should break immediately
                     if self.squares[new_row][new_col].has_team_piece(piece.color):
                         break
@@ -184,7 +210,7 @@ class Board:
                 # not inside the board
                 else:
                     break
-                
+
                 # add the same increment to check for other squares that are in the same direction.
                 new_row += row_incr
                 new_col += col_incr
