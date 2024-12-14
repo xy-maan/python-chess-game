@@ -134,12 +134,14 @@ class Main:
                     if event.key == pygame.K_t:
                         game.change_theme()
 
-                    # # changing themes
-                    # if event.key == pygame.K_r:
-                    #     game.reset()
-                    #     game = self.game
-                    #     board = self.game.board
-                    #     dragger = self.game.dragger
+                    # reset the game
+                    if event.key == pygame.K_r:
+                        game.reset()
+
+                        # since we restarted the game, we need to refresh the values.
+                        game = self.game
+                        board = self.game.board
+                        dragger = self.game.dragger
 
                 elif event.type == pygame.QUIT:
                     running = False
