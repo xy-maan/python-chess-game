@@ -12,6 +12,7 @@ from dragger import Dragger
 
 class Game:
     def __init__(self):
+        self.player = "white"
         self.board = Board()
         self.dragger = Dragger()
 
@@ -61,3 +62,6 @@ class Game:
                 rect = (move.final.col * SQUARE_SIZE, move.final.row * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE)
 
                 pygame.draw.rect(surface, color, rect)
+
+    def change_player(self):
+        self.player = "white" if self.player == "black" else "black"

@@ -47,13 +47,15 @@ class Main:
 
                         piece = board.squares[clicked_row][clicked_col].piece
 
-                        board.calc_moves(clicked_row, clicked_col, piece)
+                        # is it the player's turn ?
+                        if game.player == piece.color:
+                            board.calc_moves(clicked_row, clicked_col, piece)
 
-                        dragger.save_init_pos(event.pos)
-                        
-                        dragger.drag_on(piece)
+                            dragger.save_init_pos(event.pos)
+                            
+                            dragger.drag_on(piece)
 
-                        game.show_moves(screen)
+                            game.show_moves(screen)
 
                 # mouse motion event
                 elif event.type == pygame.MOUSEMOTION:
@@ -89,6 +91,9 @@ class Main:
                         # check if the square we released the piece on is actually a valid square.
                         if board.valid_move(dragger.piece, move):
                             board.move(dragger.piece, move)
+
+                            # change the turn for other player.
+                            game.change_player()
 
                             game.show_background(screen)
                             # game.show_moves(screen)
