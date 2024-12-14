@@ -64,12 +64,9 @@ class Board:
         piece.moved = True
 
         # clear all the valid moves (highlighted squares), since we changed the position.
-        self.clear_moves()
+        piece.moves = []
 
         self.last_move = move
-    
-    def clear_moves(self):
-        self.moves = []
 
     def valid_move(self, piece, move):
 
