@@ -21,6 +21,7 @@ class Config:
         # currenttly selected theme
         self.theme = self.themes[self.idx]
 
+        # font that will be used to display coordinates on the board (letters and numbers)
         self.font = pygame.font.SysFont("monospace", 18, bold=True)
 
         # move sound

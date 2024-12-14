@@ -10,6 +10,7 @@ from const import *
 from board import Board
 from dragger import Dragger
 from config import Config
+from square import Square
 
 
 class Game:
@@ -34,6 +35,30 @@ class Game:
                 rect = (col * SQUARE_SIZE, row * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE)  # (x, y, width, height)
 
                 pygame.draw.rect(surface, color, rect)
+
+                # number coordinates (rows)
+                if col == 0:
+                    color = theme.square_color.dark if row % 2 == 0 else theme.square_color.light
+
+                    # label is the number that's gonna be on the square
+                    label = self.config.font.render(str(ROWS - row), 1, color)
+
+                    # label pos holds the position of that label
+                    label_pos = (5, 5 + row * SQUARE_SIZE)
+
+                    surface.blit(label, label_pos)
+
+                # letter coordinates (cols)
+                if row == 7:
+                    color = theme.square_color.dark if (row + col) % 2 == 0 else theme.square_color.light
+
+                    # label is the number that's gonna be on the square
+                    label = self.config.font.render(Square.get_alpha(col), 1, color)
+
+                    # label pos holds the position of that label
+                    label_pos = (col * SQUARE_SIZE + SQUARE_SIZE - 20, HEIGHT - 20)
+
+                    surface.blit(label, label_pos)
 
     def show_pieces(self, surface):
 
