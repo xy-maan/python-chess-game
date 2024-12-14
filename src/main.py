@@ -55,15 +55,13 @@ class Main:
                             board.calc_moves(clicked_row, clicked_col, piece)
 
                             dragger.save_init_pos(event.pos)
-                            
-                            dragger.drag_on(piece)
 
+                            dragger.drag_on(piece)
 
                             # game.show_background(screen)
                             game.show_last_move(screen)
                             game.show_moves(screen)
                             # game.show_pieces(screen)
-
 
                 # mouse motion event
                 elif event.type == pygame.MOUSEMOTION:
@@ -87,7 +85,7 @@ class Main:
 
                 # release event
                 elif event.type == pygame.MOUSEBUTTONUP:
-                    
+
                     if dragger.dragging:
 
                         # update the pos to the place we released the piece on.
@@ -117,13 +115,26 @@ class Main:
 
                             # game.show_pieces(screen)
 
-
                     dragger.drag_off()
 
                     # to fix the "must click again to show the piece after release" error.
                     game.show_pieces(screen)
 
-                if event.type == pygame.QUIT:
+                # key press
+                elif event.type == pygame.KEYDOWN:
+
+                    # changing themes
+                    if event.key == pygame.K_t:
+                        game.change_theme()
+
+                    # # changing themes
+                    # if event.key == pygame.K_r:
+                    #     game.reset()
+                    #     game = self.game
+                    #     board = self.game.board
+                    #     dragger = self.game.dragger
+
+                elif event.type == pygame.QUIT:
                     running = False
 
                 pygame.display.update()  # update the screen with the latest made events

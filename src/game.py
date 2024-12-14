@@ -9,6 +9,7 @@ import pygame
 from const import *
 from board import Board
 from dragger import Dragger
+from config import Config
 
 
 class Game:
@@ -17,18 +18,18 @@ class Game:
         self.hovered_square = None
         self.board = Board()
         self.dragger = Dragger()
+        self.config = Config()
 
     # show methods
 
     def show_background(self, surface):
 
+        theme = self.config.theme
+
         # draw the board
         for row in range(ROWS):
             for col in range(COLS):
-                if (row + col) % 2 == 0:
-                    color = (199, 194, 172)
-                else:
-                    color = (91, 87, 83)
+                color = theme.square_color.light if (row + col) % 2 == 0 else theme.square_color.dark
 
                 rect = (col * SQUARE_SIZE, row * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE)  # (x, y, width, height)
 
@@ -54,12 +55,15 @@ class Game:
                         surface.blit(img, piece.pos)
 
     def show_moves(self, surface):
+
+        theme = self.config.theme
+
         if self.dragger.dragging:
             piece = self.dragger.piece
 
             # loop on all valid moves that were added to the moves array.
             for move in piece.moves:
-                color = "#C86464" if (move.final.row + move.final.col) % 2 == 0 else "#C84646"
+                color = theme.valid_move.light if (move.final.row + move.final.col) % 2 == 0 else theme.valid_move.dark
 
                 rect = (move.final.col * SQUARE_SIZE, move.final.row * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE)
 
@@ -72,8 +76,10 @@ class Game:
             initial = self.board.last_move.initial
             final = self.board.last_move.final
 
+            theme = self.config.theme
+
             for pos in [initial, final]:
-                color = (244, 247, 116) if (pos.row + pos.col) % 2 == 0 else (172, 196, 51)
+                color = theme.last_move.light if (pos.row + pos.col) % 2 == 0 else theme.last_move.dark
 
                 rect = (pos.col * SQUARE_SIZE, pos.row * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE)
 
@@ -92,3 +98,6 @@ class Game:
 
     def change_player(self):
         self.player = "white" if self.player == "black" else "black"
+
+    def change_theme(self):
+        self.config.change_theme()
