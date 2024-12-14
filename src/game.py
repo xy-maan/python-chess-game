@@ -10,9 +10,11 @@ from const import *
 from board import Board
 from dragger import Dragger
 
+
 class Game:
     def __init__(self):
         self.player = "white"
+        self.hovered_square = None
         self.board = Board()
         self.dragger = Dragger()
 
@@ -28,7 +30,7 @@ class Game:
                 else:
                     color = (91, 87, 83)
 
-                rect = (col * SQUARE_SIZE, row * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE) # (x, y, width, height)
+                rect = (col * SQUARE_SIZE, row * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE)  # (x, y, width, height)
 
                 pygame.draw.rect(surface, color, rect)
 
@@ -36,7 +38,7 @@ class Game:
 
         for row in range(ROWS):
             for col in range(COLS):
-                
+
                 if self.board.squares[row][col].has_piece():
                     piece = self.board.squares[row][col].piece
 
@@ -62,6 +64,31 @@ class Game:
                 rect = (move.final.col * SQUARE_SIZE, move.final.row * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE)
 
                 pygame.draw.rect(surface, color, rect)
+
+    def show_last_move(self, surface):
+        if self.board.last_move:
+
+            # save the initial and final squares.
+            initial = self.board.last_move.initial
+            final = self.board.last_move.final
+
+            for pos in [initial, final]:
+                color = (244, 247, 116) if (pos.row + pos.col) % 2 == 0 else (172, 196, 51)
+
+                rect = (pos.col * SQUARE_SIZE, pos.row * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE)
+
+                pygame.draw.rect(surface, color, rect)
+
+    def set_hover(self, row, col):
+        self.hovered_square = self.board.squares[row][col]
+
+    def show_hover(self, surface):
+        if self.hovered_square:
+            color = (180, 180, 180)
+
+            rect = (self.hovered_square.col * SQUARE_SIZE, self.hovered_square.row * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE)
+
+            pygame.draw.rect(surface, color, rect, width=3)
 
     def change_player(self):
         self.player = "white" if self.player == "black" else "black"

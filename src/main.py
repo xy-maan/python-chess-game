@@ -27,7 +27,10 @@ class Main:
         while running:
 
             game.show_background(screen)
+            game.show_last_move(screen)
+            game.show_moves(screen)
             game.show_pieces(screen)
+            game.show_hover(screen)
 
             for event in pygame.event.get():
 
@@ -55,18 +58,30 @@ class Main:
                             
                             dragger.drag_on(piece)
 
+
+                            # game.show_background(screen)
+                            game.show_last_move(screen)
                             game.show_moves(screen)
+                            # game.show_pieces(screen)
+
 
                 # mouse motion event
                 elif event.type == pygame.MOUSEMOTION:
+                    motion_row = event.pos[1] // SQUARE_SIZE
+                    motion_col = event.pos[0] // SQUARE_SIZE
+
+                    game.set_hover(motion_row, motion_col)
+
                     if dragger.dragging:
                         dragger.update_mouse(event.pos)
 
                         # to avoid the illusion of having another piece behind the piece that is being dragged.
                         # game.show_background(screen)
-                        # game.show_pieces(screen)
 
+                        game.show_last_move(screen)
                         game.show_moves(screen)
+                        # game.show_pieces(screen)
+                        game.show_hover(screen)
 
                         dragger.drag(screen)
 
@@ -97,6 +112,10 @@ class Main:
 
                             game.show_background(screen)
                             # game.show_moves(screen)
+
+                            game.show_last_move(screen)
+
+                            # game.show_pieces(screen)
 
 
                     dragger.drag_off()
