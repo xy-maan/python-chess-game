@@ -3,7 +3,8 @@ import sys  # for quitting the game
 
 from const import *
 from game import Game
-
+from square import Square
+from move import Move
 
 class Main:
     def __init__(self):
@@ -69,6 +70,30 @@ class Main:
 
                 # release event
                 elif event.type == pygame.MOUSEBUTTONUP:
+                    
+                    if dragger.dragging:
+
+                        # update the pos to the place we released the piece on.
+                        dragger.update_mouse(event.pos)
+
+                        # get the new coordinates.
+                        release_row = dragger.mouseY // SQUARE_SIZE
+                        release_col = dragger.mouseX // SQUARE_SIZE
+
+                        # create initial and final squares to move on.
+                        initial = Square(dragger.initial_row, dragger.initial_col)
+                        final = Square(release_row, release_col)
+
+                        move = Move(initial, final)
+
+                        # check if the square we released the piece on is actually a valid square.
+                        if board.valid_move(dragger.piece, move):
+                            board.move(dragger.piece, move)
+
+                            game.show_background(screen)
+                            # game.show_moves(screen)
+
+
                     dragger.drag_off()
 
                     # to fix the "must click again to show the piece after release" error.

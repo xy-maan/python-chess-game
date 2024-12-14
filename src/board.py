@@ -8,6 +8,7 @@ class Board:
 
     def __init__(self):
         self.squares = [[0, 0, 0, 0, 0, 0, 0, 0] for _ in range(COLS)]
+        self.last_move = None
         self._create()
         self._add_pieces("white")
         self._add_pieces("black")
@@ -43,6 +44,37 @@ class Board:
 
         # King
         self.squares[row_other][4] = Square(row_other, 4, King(color))
+
+    # move is a Move() object
+    def move(self, piece, move):
+
+        # get move coordianates
+        initial = move.initial
+        final = move.final
+
+
+        # updating the board
+
+        # remove the piece form the old square.
+        self.squares[initial.row][initial.col].piece = None
+
+        # put the piece on the new square.
+        self.squares[final.row][final.col].piece = piece
+
+        piece.moved = True
+
+        # clear all the valid moves (highlighted squares), since we changed the position.
+        self.clear_moves()
+
+        self.last_move = move
+    
+    def clear_moves(self):
+        self.moves = []
+
+    def valid_move(self, piece, move):
+
+        # we need to implement the __eq__ method inside move.py to let python know how to compare them, since they are self made objects.
+        return move in piece.moves
 
     # main valid moves calculation method
     def calc_moves(self, row, col, piece):
