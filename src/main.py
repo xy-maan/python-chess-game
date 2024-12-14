@@ -103,7 +103,14 @@ class Main:
 
                         # check if the square we released the piece on is actually a valid square.
                         if board.valid_move(dragger.piece, move):
+                            
+                            # if the square we are moving into has a piece, then we play the capture sound, otherwise move sound.
+                            capture = board.squares[release_row][release_col].has_piece()
+
                             board.move(dragger.piece, move)
+
+                            # play the sound of the move
+                            game.play_sound(capture)
 
                             # change the turn for other player.
                             game.change_player()
