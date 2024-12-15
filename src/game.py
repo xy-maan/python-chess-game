@@ -133,5 +133,8 @@ class Game:
         else:
             self.config.move_sound.play()
 
+    def promote_sound(self):
+        self.config.promotion_sound.play()
+
     def reset(self):
         self.__init__()

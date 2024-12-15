@@ -5,6 +5,7 @@ from const import *
 from game import Game
 from square import Square
 from move import Move
+from piece import Pawn
 
 class Main:
     def __init__(self):
@@ -108,9 +109,13 @@ class Main:
                             capture = board.squares[release_row][release_col].has_piece()
 
                             board.move(dragger.piece, move)
-
-                            # play the sound of the move
-                            game.play_sound(capture)
+                            
+                            # promition sound logic, by xy-man.
+                            if isinstance(dragger.piece, Pawn) and release_row == 7 or release_row == 0:
+                                game.promote_sound()
+                            else:
+                                # play the sound of the move
+                                game.play_sound(capture)
 
                             # change the turn for other player.
                             game.change_player()

@@ -61,6 +61,10 @@ class Board:
         # put the piece on the new square.
         self.squares[final.row][final.col].piece = piece
 
+        # pawn promotion
+        if isinstance(piece, Pawn):
+            self.check_promotion(piece, final)
+
         piece.moved = True
 
         # clear all the valid moves (highlighted squares), since we changed the position.
@@ -72,6 +76,12 @@ class Board:
 
         # we need to implement the __eq__ method inside move.py to let python know how to compare them, since they are self made objects.
         return move in piece.moves
+
+    def check_promotion(self, piece, final):
+        
+        # has the pawn reached the final row from either side?
+        if final.row == 0 or final.row == 7:
+            self.squares[final.row][final.col].piece = Queen(piece.color)
 
     # main valid moves calculation method
     def calc_moves(self, row, col, piece):

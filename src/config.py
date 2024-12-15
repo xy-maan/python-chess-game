@@ -30,6 +30,9 @@ class Config:
         # capture sound
         self.capture_sound = Sound(os.path.join("../assets/sounds/capture.mp3"))
 
+        # promotion sound
+        self.promotion_sound = Sound(os.path.join("../assets/sounds/promote.mp3"))
+
 
     def change_theme(self):
 
