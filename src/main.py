@@ -111,7 +111,7 @@ class Main:
                             board.move(dragger.piece, move)
                             
                             # promition sound logic, by xy-man.
-                            if isinstance(dragger.piece, Pawn) and release_row == 7 or release_row == 0:
+                            if isinstance(dragger.piece, Pawn) and (release_row == 7 or release_row == 0):
                                 game.promote_sound()
                             else:
                                 # play the sound of the move
