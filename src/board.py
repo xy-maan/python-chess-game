@@ -83,6 +83,13 @@ class Board:
         if final.row == 0 or final.row == 7:
             self.squares[final.row][final.col].piece = Queen(piece.color)
 
+    def promoted(self, piece, row):
+
+        if isinstance(piece, Pawn) and (row == 0 or row == 7):
+            return True
+        
+        return False
+
     # main valid moves calculation method
     def calc_moves(self, row, col, piece):
 

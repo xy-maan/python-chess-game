@@ -7,6 +7,7 @@ from square import Square
 from move import Move
 from piece import Pawn
 
+
 class Main:
     def __init__(self):
         pygame.init()  # initialize required modules.
@@ -104,18 +105,18 @@ class Main:
 
                         # check if the square we released the piece on is actually a valid square.
                         if board.valid_move(dragger.piece, move):
-                            
+
                             # if the square we are moving into has a piece, then we play the capture sound, otherwise move sound.
                             capture = board.squares[release_row][release_col].has_piece()
 
                             board.move(dragger.piece, move)
-                            
+
                             # promition sound logic, by xy-man.
-                            if isinstance(dragger.piece, Pawn) and (release_row == 7 or release_row == 0):
+                            if board.promoted(piece, release_row):
                                 game.promote_sound()
                             else:
                                 # play the sound of the move
-                                game.play_sound(capture)
+                                game.move_sound(capture)
 
                             # change the turn for other player.
                             game.change_player()
