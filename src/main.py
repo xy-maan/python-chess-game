@@ -54,7 +54,7 @@ class Main:
 
                         # is it the player's turn ?
                         if game.player == piece.color:
-                            board.calc_moves(clicked_row, clicked_col, piece)
+                            board.calc_moves(clicked_row, clicked_col, piece, flag=True)
 
                             dragger.save_init_pos(event.pos)
 

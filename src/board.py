@@ -2,7 +2,7 @@ from square import Square
 from const import *
 from piece import *
 from move import Move
-
+import copy
 
 class Board:
 
@@ -110,16 +110,16 @@ class Board:
         return isinstance(piece, King) and abs(initial.col - final.col) == 2
 
     # main valid moves calculation method
-    def calc_moves(self, row, col, piece):
+    def calc_moves(self, row, col, piece, flag=True):
 
         if isinstance(piece, Pawn):
-            self.pawn_moves(row, col, piece)
+            self.pawn_moves(row, col, piece, flag)
         elif isinstance(piece, Bishop):
-            self.straightline_moves(row, col, piece, [(-1, 1), (-1, -1), (1, 1), (1, -1)])  # up-right  # up-left  # down-right  # down-left
+            self.straightline_moves(row, col, piece, [(-1, 1), (-1, -1), (1, 1), (1, -1)], flag)  # up-right  # up-left  # down-right  # down-left
         elif isinstance(piece, Knight):
-            self.knight_moves(row, col, piece)
+            self.knight_moves(row, col, piece, flag)
         elif isinstance(piece, Rook):
-            self.straightline_moves(row, col, piece, [(-1, 0), (0, 1), (1, 0), (0, -1)])  # up  # right  # down  # left
+            self.straightline_moves(row, col, piece, [(-1, 0), (0, 1), (1, 0), (0, -1)], flag)  # up  # right  # down  # left
         elif isinstance(piece, Queen):
             self.straightline_moves(
                 row,
@@ -135,6 +135,7 @@ class Board:
                     (1, 1),  # down-right
                     (1, -1),  # down-left
                 ],
+                flag
             )
         elif isinstance(piece, King):
             self.king_moves(row, col, piece)
@@ -231,7 +232,7 @@ class Board:
                             piece.add_move(move)
 
     # calculate knight valid moves
-    def knight_moves(self, row, col, piece):
+    def knight_moves(self, row, col, piece, flag=True):
 
         # all the moves a knight can make being on any square.
         moves = [
@@ -254,12 +255,15 @@ class Board:
                     initial = Square(row, col)
                     final = Square(new_row, new_col)
 
+                    # save the final piece to determine if it's the king of the opponent (check)
+                    final_piece = self.squares[new_row][new_col].piece
+
                     move = Move(initial, final)
 
                     piece.add_move(move)
 
     # calculate valid pawn moves
-    def pawn_moves(self, row, col, piece):
+    def pawn_moves(self, row, col, piece, flag=True):
 
         # a pawn can move 2 squares on the first move, otherwise, it moves 1 square.
         steps = 1 if piece.moved == True else 2
@@ -280,8 +284,22 @@ class Board:
             final = Square(move, col)
 
             move = Move(initial, final)
+            
+            # called from main, need to calculate potential checks
+            if flag:
+                # check potential checks
 
-            piece.add_move(move)
+                temp = self.in_check(piece, move)
+
+                print(temp)
+                
+                if not temp:
+                    piece.add_move(move)
+            else:
+                # called from in_check calculating opponent valid moves.
+                piece.add_move(move)
+                
+
 
         # diagonal moves
         new_row = row + piece.dir
@@ -293,12 +311,15 @@ class Board:
                     initial = Square(row, col)
                     final = Square(new_row, new_col)
 
+                    # save the final piece to determine if it's the king of the opponent (check)
+                    final_piece = self.squares[new_row][new_col].piece
+
                     move = Move(initial, final)
 
                     piece.add_move(move)
 
     # calculate valid moves for queen, rook and bishop
-    def straightline_moves(self, row, col, piece, incrs):
+    def straightline_moves(self, row, col, piece, incrs, flag=True):
 
         for incr in incrs:
 
@@ -315,6 +336,9 @@ class Board:
                     initial = Square(row, col)
                     final = Square(new_row, new_col)
 
+                    # save the final piece to determine if it's the king of the opponent (check)
+                    final_piece = self.squares[new_row][new_col].piece
+
                     move = Move(initial, final)
 
                     # the square is empty, then it's valid
@@ -322,14 +346,14 @@ class Board:
                         piece.add_move(move)
 
                     # the square has an enemy piece
-                    if self.squares[new_row][new_col].has_enemy_piece(piece.color):
+                    elif self.squares[new_row][new_col].has_enemy_piece(piece.color):
                         piece.add_move(move)
 
                         # we break since it's the last point we can reach
                         break
 
                     # the square has a team piece, here we should break immediately
-                    if self.squares[new_row][new_col].has_team_piece(piece.color):
+                    elif self.squares[new_row][new_col].has_team_piece(piece.color):
                         break
 
                 # not inside the board
@@ -339,3 +363,19 @@ class Board:
                 # add the same increment to check for other squares that are in the same direction.
                 new_row += row_incr
                 new_col += col_incr
+
+    def in_check(self, piece, move):
+        temp_piece = copy.deepcopy(piece)
+        temp_board = copy.deepcopy(self)
+        temp_board.move(temp_piece, move)
+        
+        for row in range(ROWS):
+            for col in range(COLS):
+                if temp_board.squares[row][col].has_enemy_piece(piece.color):
+                    p = temp_board.squares[row][col].piece
+                    temp_board.calc_moves(p, row, col, flag=False)
+                    for m in p.moves:
+                        if isinstance(m.final.piece, King):
+                            return True
+        
+        return False
