@@ -33,6 +33,9 @@ class Config:
         # promotion sound
         self.promotion_sound = Sound(os.path.join("../assets/sounds/promote.mp3"))
 
+        # castling sound
+        self.castle_sound = Sound(os.path.join("../assets/sounds/castle.mp3"))
+
 
     def change_theme(self):
 

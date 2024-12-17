@@ -136,5 +136,8 @@ class Game:
     def promote_sound(self):
         self.config.promotion_sound.play()
 
+    def castle_sound(self):
+        self.config.castle_sound.play()
+
     def reset(self):
         self.__init__()

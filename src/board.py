@@ -106,6 +106,9 @@ class Board:
     def castling(self, initial, final):
         return abs(initial.col - final.col) == 2
 
+    def castled(self, piece, initial, final):
+        return isinstance(piece, King) and abs(initial.col - final.col) == 2
+
     # main valid moves calculation method
     def calc_moves(self, row, col, piece):
 

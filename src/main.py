@@ -114,6 +114,9 @@ class Main:
                             # promition sound logic, by xy-man.
                             if board.promoted(piece, release_row):
                                 game.promote_sound()
+                            # castling sound logic also by xy-man.
+                            elif board.castled(piece, initial, final):
+                                game.castle_sound()
                             else:
                                 # play the sound of the move
                                 game.move_sound(capture)
