@@ -59,4 +59,8 @@ class Queen(Piece):
 class King(Piece):
 
     def __init__(self, color):
+        # for castling
+        left_rook = None
+        right_rook = None
+        
         super().__init__("king", color, 10000)
